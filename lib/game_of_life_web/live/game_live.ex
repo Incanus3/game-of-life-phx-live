@@ -59,7 +59,7 @@ defmodule GameOfLifeWeb.GameLive do
   @impl true
   def handle_event("load_pattern", _params, socket) do
     pattern_name = socket.assigns.selected_pattern
-    pattern = socket.assigns.patterns[pattern_name]
+    pattern = socket.assigns.patterns.patterns[pattern_name]
     if pattern, do: Game.load_pattern(pattern)
     {:noreply, socket}
   end
@@ -111,16 +111,20 @@ defmodule GameOfLifeWeb.GameLive do
           <form phx-change="pattern_change">
             <label for="pattern">Pattern:</label>
             <select id="pattern" name="pattern">
-              <%= for {pattern_name, _} <- @patterns do %>
-                <%= if pattern_name == @selected_pattern do %>
-                  <option value={pattern_name} selected>
-                    <%= String.capitalize(pattern_name) %>
-                  </option>
-                <% else %>
-                  <option value={pattern_name}>
-                    <%= String.capitalize(pattern_name) %>
-                  </option>
-                <% end %>
+              <%= for {category_name, patterns} <- @patterns.categories do %>
+                <optgroup label={category_name}>
+                  <%= for {pattern_key, pattern_name, tooltip} <- patterns do %>
+                    <%= if pattern_key == @selected_pattern do %>
+                      <option value={pattern_key} selected title={tooltip}>
+                        <%= pattern_name %>
+                      </option>
+                    <% else %>
+                      <option value={pattern_key} title={tooltip}>
+                        <%= pattern_name %>
+                      </option>
+                    <% end %>
+                  <% end %>
+                </optgroup>
               <% end %>
             </select>
           </form>

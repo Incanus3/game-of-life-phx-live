@@ -250,9 +250,11 @@ defmodule GameOfLife.Game do
     end)
   end
 
-  # Game of Life patterns - from simple to complex
+  # Game of Life patterns with categories and descriptions
   def get_patterns() do
     %{
+      # Pattern data (pattern_name => grid)
+      patterns: %{
       # Basic patterns
       "glider" => [
         [false, true, false],
@@ -360,10 +362,42 @@ defmodule GameOfLife.Game do
         [false, true, false, true],
         [false, false, true, false]
       ],
-      "boat" => [
-        [true, true, false],
-        [true, false, true],
-        [false, true, false]
+        "boat" => [
+          [true, true, false],
+          [true, false, true],
+          [false, true, false]
+        ]
+      },
+      # Pattern categories with names and tooltips
+      categories: [
+        {"Basic Patterns", [
+          {"glider", "Glider", "Classic diagonal spaceship that moves across the grid"},
+          {"block", "Block", "Simple 2×2 still life that never changes"},
+          {"blinker", "Blinker", "Simple period-2 oscillator (3 cells in a line)"}
+        ]},
+        {"Oscillators", [
+          {"toad", "Toad", "Period-2 oscillator that rocks back and forth"},
+          {"beacon", "Beacon", "Period-2 oscillator with flashing corner"},
+          {"pulsar", "Pulsar", "Beautiful period-3 oscillator (13×13)"},
+          {"pentadecathlon", "Pentadecathlon", "Period-15 oscillator (10×3)"}
+        ]},
+        {"Spaceships", [
+          {"lightweight_spaceship", "Lightweight Spaceship", "Travels horizontally every 4 generations"},
+          {"middleweight_spaceship", "Middleweight Spaceship", "Larger, faster spaceship"}
+        ]},
+        {"Glider Guns", [
+          {"gosper_glider_gun", "Gosper Glider Gun", "Continuously creates gliders! (36×9)"}
+        ]},
+        {"Methuselahs", [
+          {"r_pentomino", "R-Pentomino", "Evolves for 1,103 generations before stabilizing"},
+          {"diehard", "Diehard", "Lives for exactly 130 generations then dies completely"},
+          {"acorn", "Acorn", "Takes 5,206 generations to stabilize (amazing!)"}
+        ]},
+        {"Still Lifes", [
+          {"beehive", "Beehive", "Hexagonal stable pattern"},
+          {"loaf", "Loaf", "Asymmetric stable pattern with a 'bite' taken out"},
+          {"boat", "Boat", "Small 3×3 stable pattern"}
+        ]}
       ]
     }
   end

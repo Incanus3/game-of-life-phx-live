@@ -195,6 +195,20 @@ select {
   border-radius: var(--radius-field);
   background: var(--color-base-100);
   color: var(--color-base-content);
+  min-width: 300px;
+  max-width: 500px;
+}
+
+select optgroup {
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-top: 0.5rem;
+}
+
+select option {
+  padding: 0.25rem 0.5rem;
+  font-weight: normal;
+  color: var(--color-base-content);
 }
 
 label {
