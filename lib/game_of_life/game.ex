@@ -40,8 +40,8 @@ defmodule GameOfLife.Game do
 
   @impl true
   def init(opts) do
-    width = Keyword.get(opts, :width, 50)
-    height = Keyword.get(opts, :height, 30)
+    width = Keyword.get(opts, :width, 100)
+    height = Keyword.get(opts, :height, 60)
     speed = Keyword.get(opts, :speed, 200)
 
     state = %{
