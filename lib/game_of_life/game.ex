@@ -250,9 +250,10 @@ defmodule GameOfLife.Game do
     end)
   end
 
-  # Some common patterns
+  # Game of Life patterns - from simple to complex
   def get_patterns() do
     %{
+      # Basic patterns
       "glider" => [
         [false, true, false],
         [false, false, true],
@@ -265,6 +266,8 @@ defmodule GameOfLife.Game do
       "blinker" => [
         [true, true, true]
       ],
+      
+      # Period 2 oscillators
       "toad" => [
         [false, true, true, true],
         [true, true, true, false]
@@ -274,6 +277,93 @@ defmodule GameOfLife.Game do
         [true, true, false, false],
         [false, false, true, true],
         [false, false, true, true]
+      ],
+      
+      # Spaceships
+      "lightweight_spaceship" => [
+        [false, true, false, false, true],
+        [true, false, false, false, false],
+        [true, false, false, false, true],
+        [true, true, true, true, false]
+      ],
+      "middleweight_spaceship" => [
+        [false, false, true, false, false, false],
+        [false, true, false, false, false, true],
+        [true, false, false, false, false, false],
+        [true, false, false, false, false, true],
+        [true, true, true, true, true, false]
+      ],
+      
+      # Oscillators
+      "pulsar" => [
+        [false, false, true, true, true, false, false, false, true, true, true, false, false],
+        [false, false, false, false, false, false, false, false, false, false, false, false, false],
+        [true, false, false, false, false, true, false, true, false, false, false, false, true],
+        [true, false, false, false, false, true, false, true, false, false, false, false, true],
+        [true, false, false, false, false, true, false, true, false, false, false, false, true],
+        [false, false, true, true, true, false, false, false, true, true, true, false, false],
+        [false, false, false, false, false, false, false, false, false, false, false, false, false],
+        [false, false, true, true, true, false, false, false, true, true, true, false, false],
+        [true, false, false, false, false, true, false, true, false, false, false, false, true],
+        [true, false, false, false, false, true, false, true, false, false, false, false, true],
+        [true, false, false, false, false, true, false, true, false, false, false, false, true],
+        [false, false, false, false, false, false, false, false, false, false, false, false, false],
+        [false, false, true, true, true, false, false, false, true, true, true, false, false]
+      ],
+      
+      # Interesting patterns
+      "pentadecathlon" => [
+        [false, false, true, false, false, false, false, true, false, false],
+        [true, true, false, true, true, true, true, false, true, true],
+        [false, false, true, false, false, false, false, true, false, false]
+      ],
+      "r_pentomino" => [
+        [false, true, true],
+        [true, true, false],
+        [false, true, false]
+      ],
+      
+      # Glider gun (classic pattern that generates gliders)
+      "gosper_glider_gun" => [
+        [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true],
+        [false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true],
+        [true, true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+        [true, true, false, false, false, false, false, false, false, false, true, false, false, false, true, false, true, true, false, false, false, false, true, false, true, false, false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+      ],
+      
+      # Methuselah patterns (evolve for a long time)
+      "diehard" => [
+        [false, false, false, false, false, false, true, false],
+        [true, true, false, false, false, false, false, false],
+        [false, true, false, false, false, true, true, true]
+      ],
+      "acorn" => [
+        [false, true, false, false, false, false, false],
+        [false, false, false, true, false, false, false],
+        [true, true, false, false, true, true, true]
+      ],
+      
+      # Still lifes
+      "beehive" => [
+        [false, true, true, false],
+        [true, false, false, true],
+        [false, true, true, false]
+      ],
+      "loaf" => [
+        [false, true, true, false],
+        [true, false, false, true],
+        [false, true, false, true],
+        [false, false, true, false]
+      ],
+      "boat" => [
+        [true, true, false],
+        [true, false, true],
+        [false, true, false]
       ]
     }
   end
