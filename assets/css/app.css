@@ -209,7 +209,7 @@ label {
   padding: 1px;
   border-radius: var(--radius-field);
   margin: 0 auto 2rem;
-  max-width: 90vw;
+  width: fit-content;
   overflow: auto;
   border: 2px solid var(--color-base-300);
 }
