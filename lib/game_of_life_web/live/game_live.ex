@@ -93,17 +93,18 @@ defmodule GameOfLifeWeb.GameLive do
         </div>
 
         <div class="control-group">
-          <label for="speed">Speed:</label>
-          <input
-            type="range"
-            id="speed"
-            name="speed"
-            min="50"
-            max="1000"
-            step="50"
-            value={@game_state.speed}
-            phx-change="speed_change"
-          />
+          <form phx-change="speed_change">
+            <label for="speed">Speed:</label>
+            <input
+              type="range"
+              id="speed"
+              name="speed"
+              min="50"
+              max="1000"
+              step="50"
+              value={@game_state.speed}
+            />
+          </form>
           <span><%= @game_state.speed %>ms</span>
         </div>
 
