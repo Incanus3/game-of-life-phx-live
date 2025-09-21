@@ -215,8 +215,6 @@ label {
 }
 
 .cell {
-  width: 12px;
-  height: 12px;
   cursor: pointer;
   transition: all 0.1s ease;
   border-radius: 1px;
@@ -276,9 +274,8 @@ label {
     gap: 0.5rem;
   }
   
-  .cell {
-    width: 10px;
-    height: 10px;
+  .game-grid {
+    font-size: 0.8rem;
   }
   
   .header h1 {

@@ -128,17 +128,15 @@ defmodule GameOfLifeWeb.GameLive do
         </div>
       </div>
 
-      <div class="game-grid" style={"grid-template-columns: repeat(#{@game_state.width}, 1fr);"}>
-        <%= for row <- 0..(@game_state.height - 1) do %>
-          <%= for col <- 0..(@game_state.width - 1) do %>
-            <div
-              class={["cell", if(get_cell_state(@game_state.grid, row, col), do: "alive", else: "dead")]}
-              phx-click="toggle_cell"
-              phx-value-row={row}
-              phx-value-col={col}
-            >
-            </div>
-          <% end %>
+      <div class="game-grid" style={"grid-template-columns: repeat(#{@game_state.width}, 12px); grid-template-rows: repeat(#{@game_state.height}, 12px);"}> 
+        <%= for row <- 0..(@game_state.height - 1), col <- 0..(@game_state.width - 1) do %>
+          <div
+            class={["cell", if(get_cell_state(@game_state.grid, row, col), do: "alive", else: "dead")]}
+            phx-click="toggle_cell"
+            phx-value-row={row}
+            phx-value-col={col}
+          >
+          </div>
         <% end %>
       </div>
 
