@@ -108,14 +108,22 @@ defmodule GameOfLifeWeb.GameLive do
         </div>
 
         <div class="control-group">
-          <label for="pattern">Pattern:</label>
-          <select id="pattern" name="pattern" phx-change="pattern_change">
-            <%= for {pattern_name, _} <- @patterns do %>
-              <option value={pattern_name} selected={pattern_name == @selected_pattern}>
-                <%= String.capitalize(pattern_name) %>
-              </option>
-            <% end %>
-          </select>
+          <form phx-change="pattern_change">
+            <label for="pattern">Pattern:</label>
+            <select id="pattern" name="pattern">
+              <%= for {pattern_name, _} <- @patterns do %>
+                <%= if pattern_name == @selected_pattern do %>
+                  <option value={pattern_name} selected>
+                    <%= String.capitalize(pattern_name) %>
+                  </option>
+                <% else %>
+                  <option value={pattern_name}>
+                    <%= String.capitalize(pattern_name) %>
+                  </option>
+                <% end %>
+              <% end %>
+            </select>
+          </form>
           <button phx-click="load_pattern" class="btn btn-load">Load Pattern</button>
         </div>
       </div>
