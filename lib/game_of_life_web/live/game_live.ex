@@ -73,97 +73,136 @@ defmodule GameOfLifeWeb.GameLive do
   def render(assigns) do
     ~H"""
     <div class="game-of-life-container">
-      <div class="header">
-        <h1>Conway's Game of Life</h1>
-        <div class="stats">
-          <span>Generation: <%= @game_state.generation %></span>
-          <span>Status: <%= if @game_state.playing, do: "Playing", else: "Paused" %></span>
-        </div>
+      <%= render_header(assigns) %>
+      <%= render_controls(assigns) %>
+      <%= render_game_canvas(assigns) %>
+      <%= render_instructions(assigns) %>
+    </div>
+    """
+  end
+  
+  # Private render functions for better maintainability
+  
+  defp render_header(assigns) do
+    ~H"""
+    <div class="header">
+      <h1>Conway's Game of Life</h1>
+      <div class="stats">
+        <span>Generation: <%= @game_state.generation %></span>
+        <span>Status: <%= if @game_state.playing, do: "Playing", else: "Paused" %></span>
       </div>
-
-      <div class="controls">
-        <div class="control-group">
-          <button
-            phx-click={if @game_state.playing, do: "pause", else: "play"}
-            class={["btn", if(@game_state.playing, do: "btn-pause", else: "btn-play")]}
-          >
-            <%= if @game_state.playing, do: "⏸ Pause", else: "▶ Play" %>
-          </button>
-          <button phx-click="reset" class="btn btn-reset">🔄 Reset</button>
-        </div>
-
-        <div class="control-group">
-          <form phx-change="speed_change">
-            <label for="speed">Speed:</label>
-            <input
-              type="range"
-              id="speed"
-              name="speed"
-              min="50"
-              max="1000"
-              step="50"
-              value={@game_state.speed}
-            />
-          </form>
-          <span><%= @game_state.speed %>ms</span>
-        </div>
-
-        <div class="control-group">
-          <form phx-change="pattern_change">
-            <label for="pattern">Pattern:</label>
-            <select id="pattern" name="pattern">
-              <%= for {category_name, patterns} <- @patterns.categories do %>
-                <optgroup label={category_name}>
-                  <%= for {pattern_key, pattern_name, tooltip} <- patterns do %>
-                    <%= if pattern_key == @selected_pattern do %>
-                      <option value={pattern_key} selected title={tooltip}>
-                        <%= pattern_name %>
-                      </option>
-                    <% else %>
-                      <option value={pattern_key} title={tooltip}>
-                        <%= pattern_name %>
-                      </option>
-                    <% end %>
-                  <% end %>
-                </optgroup>
-              <% end %>
-            </select>
-          </form>
-          <button phx-click="load_pattern" class="btn btn-load">Load Pattern</button>
-        </div>
-      </div>
-
-      <canvas
-        id="game-canvas"
-        width={@game_state.width * 12}
-        height={@game_state.height * 12}
-        phx-hook="GameCanvas"
-        phx-update="ignore"
-        data-width={@game_state.width}
-        data-height={@game_state.height}
-        data-grid={Jason.encode!(grid_to_json(@game_state.grid))}
-        data-generation={@game_state.generation}
-        class="game-canvas"
+    </div>
+    """
+  end
+  
+  defp render_controls(assigns) do
+    ~H"""
+    <div class="controls">
+      <%= render_game_controls(assigns) %>
+      <%= render_speed_control(assigns) %>
+      <%= render_pattern_control(assigns) %>
+    </div>
+    """
+  end
+  
+  defp render_game_controls(assigns) do
+    ~H"""
+    <div class="control-group">
+      <button
+        phx-click={if @game_state.playing, do: "pause", else: "play"}
+        class={["btn", if(@game_state.playing, do: "btn-pause", else: "btn-play")]}
       >
-        Your browser doesn't support HTML5 Canvas.
-      </canvas>
-
-      <div class="instructions">
-        <h3>Instructions:</h3>
-        <ul>
-          <li>Click on cells to toggle them alive/dead</li>
-          <li>Use Play/Pause to control the simulation</li>
-          <li>Adjust speed with the slider</li>
-          <li>Load predefined patterns to see interesting behaviors</li>
-        </ul>
-        <h4>Rules of Conway's Game of Life:</h4>
-        <ol>
-          <li>Any live cell with fewer than two live neighbors dies (underpopulation)</li>
-          <li>Any live cell with two or three live neighbors survives</li>
-          <li>Any live cell with more than three live neighbors dies (overpopulation)</li>
-          <li>Any dead cell with exactly three live neighbors becomes alive (reproduction)</li>
-        </ol>
-      </div>
+        <%= if @game_state.playing, do: "⏸ Pause", else: "▶ Play" %>
+      </button>
+      <button phx-click="reset" class="btn btn-reset">🔄 Reset</button>
+    </div>
+    """
+  end
+  
+  defp render_speed_control(assigns) do
+    ~H"""
+    <div class="control-group">
+      <form phx-change="speed_change">
+        <label for="speed">Speed:</label>
+        <input
+          type="range"
+          id="speed"
+          name="speed"
+          min="50"
+          max="1000"
+          step="50"
+          value={@game_state.speed}
+        />
+      </form>
+      <span><%= @game_state.speed %>ms</span>
+    </div>
+    """
+  end
+  
+  defp render_pattern_control(assigns) do
+    ~H"""
+    <div class="control-group">
+      <form phx-change="pattern_change">
+        <label for="pattern">Pattern:</label>
+        <select id="pattern" name="pattern">
+          <%= for {category_name, patterns} <- @patterns.categories do %>
+            <optgroup label={category_name}>
+              <%= for {pattern_key, pattern_name, tooltip} <- patterns do %>
+                <%= if pattern_key == @selected_pattern do %>
+                  <option value={pattern_key} selected title={tooltip}>
+                    <%= pattern_name %>
+                  </option>
+                <% else %>
+                  <option value={pattern_key} title={tooltip}>
+                    <%= pattern_name %>
+                  </option>
+                <% end %>
+              <% end %>
+            </optgroup>
+          <% end %>
+        </select>
+      </form>
+      <button phx-click="load_pattern" class="btn btn-load">Load Pattern</button>
+    </div>
+    """
+  end
+  
+  defp render_game_canvas(assigns) do
+    ~H"""
+    <canvas
+      id="game-canvas"
+      width={@game_state.width * 12}
+      height={@game_state.height * 12}
+      phx-hook="GameCanvas"
+      phx-update="ignore"
+      data-width={@game_state.width}
+      data-height={@game_state.height}
+      data-grid={Jason.encode!(grid_to_json(@game_state.grid))}
+      data-generation={@game_state.generation}
+      class="game-canvas"
+    >
+      Your browser doesn't support HTML5 Canvas.
+    </canvas>
+    """
+  end
+  
+  defp render_instructions(assigns) do
+    ~H"""
+    <div class="instructions">
+      <h3>Instructions:</h3>
+      <ul>
+        <li>Click on cells to toggle them alive/dead</li>
+        <li>Use Play/Pause to control the simulation</li>
+        <li>Adjust speed with the slider</li>
+        <li>Load predefined patterns to see interesting behaviors</li>
+      </ul>
+      <h4>Rules of Conway's Game of Life:</h4>
+      <ol>
+        <li>Any live cell with fewer than two live neighbors dies (underpopulation)</li>
+        <li>Any live cell with two or three live neighbors survives</li>
+        <li>Any live cell with more than three live neighbors dies (overpopulation)</li>
+        <li>Any dead cell with exactly three live neighbors becomes alive (reproduction)</li>
+      </ol>
     </div>
     """
   end
