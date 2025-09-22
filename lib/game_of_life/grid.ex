@@ -1,6 +1,7 @@
 defmodule GameOfLife.Grid do
   @moduledoc """
-  Core Game of Life logic including grid operations, cell evolution, and Conway's rules implementation.
+  Core Game of Life logic including grid operations, cell evolution,
+  and Conway's rules implementation.
   Uses sparse grid representation for optimal performance.
   """
 

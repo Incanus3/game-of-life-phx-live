@@ -145,7 +145,14 @@ defmodule GameOfLife.Game do
 
   @impl true
   def handle_cast({:load_pattern, pattern}, state) do
-    new_grid = Patterns.load_pattern_onto_grid(pattern, state.grid, state.width, state.height)
+    new_grid =
+      Patterns.load_pattern_onto_grid(
+        pattern,
+        state.grid,
+        state.width,
+        state.height
+      )
+
     new_state = %{state | grid: new_grid, generation: 0}
     broadcast_state_change(new_state)
     {:noreply, new_state}
@@ -179,6 +186,10 @@ defmodule GameOfLife.Game do
   end
 
   defp broadcast_state_change(state) do
-    Phoenix.PubSub.broadcast(GameOfLife.PubSub, "game_state", {:state_change, state})
+    Phoenix.PubSub.broadcast(
+      GameOfLife.PubSub,
+      "game_state",
+      {:state_change, state}
+    )
   end
 end
