@@ -34,6 +34,14 @@ defmodule GameOfLife.Grid do
   end
 
   @doc """
+  Toggles the state of a cell at the given coordinates.
+  """
+  def toggle_cell(grid, row, col) do
+    current_value = get_cell(grid, row, col)
+    set_cell(grid, row, col, not current_value)
+  end
+
+  @doc """
   Validates if coordinates are within the grid boundaries.
   """
   def valid_coordinates?(row, col, width, height) do
@@ -58,30 +66,7 @@ defmodule GameOfLife.Grid do
     end)
   end
 
-  @doc """
-  Toggles the state of a cell at the given coordinates.
-  """
-  def toggle_cell(grid, row, col) do
-    current_value = get_cell(grid, row, col)
-    set_cell(grid, row, col, not current_value)
-  end
-
   # Private functions
-
-  @doc false
-  # Get all neighbor coordinates for a given cell (8-directional)
-  defp get_neighbor_coordinates(row, col) do
-    [
-      {row - 1, col - 1},
-      {row - 1, col},
-      {row - 1, col + 1},
-      {row, col - 1},
-      {row, col + 1},
-      {row + 1, col - 1},
-      {row + 1, col},
-      {row + 1, col + 1}
-    ]
-  end
 
   @doc false
   # Get all cells that could possibly change state
@@ -107,6 +92,21 @@ defmodule GameOfLife.Grid do
     |> Enum.count(fn {r, c} ->
       valid_coordinates?(r, c, width, height) and Map.has_key?(grid, {r, c})
     end)
+  end
+
+  @doc false
+  # Get all neighbor coordinates for a given cell (8-directional)
+  defp get_neighbor_coordinates(row, col) do
+    [
+      {row - 1, col - 1},
+      {row - 1, col},
+      {row - 1, col + 1},
+      {row, col - 1},
+      {row, col + 1},
+      {row + 1, col - 1},
+      {row + 1, col},
+      {row + 1, col + 1}
+    ]
   end
 
   @doc false
