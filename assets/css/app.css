@@ -216,35 +216,17 @@ label {
   color: var(--color-base-content);
 }
 
-.game-grid {
-  display: grid;
-  gap: 1px;
-  background: var(--color-base-300);
-  padding: 1px;
+.game-canvas {
+  border: 2px solid var(--color-base-300);
   border-radius: var(--radius-field);
   margin: 0 auto 2rem;
-  width: fit-content;
-  overflow: auto;
-  border: 2px solid var(--color-base-300);
+  display: block;
+  cursor: crosshair;
+  background: var(--color-base-300);
 }
 
-.cell {
-  cursor: pointer;
-  transition: all 0.1s ease;
-  border-radius: 1px;
-}
-
-.cell.alive {
-  background: var(--color-primary);
-}
-
-.cell.dead {
-  background: var(--color-base-100);
-}
-
-.cell:hover {
-  opacity: 0.8;
-  transform: scale(1.1);
+.game-canvas:hover {
+  border-color: var(--color-primary);
 }
 
 .instructions {

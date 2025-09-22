@@ -22,14 +22,88 @@ import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
-import {hooks as colocatedHooks} from "phoenix-colocated/game_of_life"
 import topbar from "../vendor/topbar"
+
+// Game Canvas Hook for high-performance rendering
+const GameCanvas = {
+  mounted() {
+    this.canvas = this.el
+    this.ctx = this.canvas.getContext('2d')
+    this.cellSize = 12
+    this.gridWidth = parseInt(this.el.dataset.width)
+    this.gridHeight = parseInt(this.el.dataset.height)
+    
+    // Set up click handling for cell toggling
+    this.canvas.addEventListener('click', (e) => {
+      const rect = this.canvas.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      
+      const col = Math.floor(x / this.cellSize)
+      const row = Math.floor(y / this.cellSize)
+      
+      if (col >= 0 && col < this.gridWidth && row >= 0 && row < this.gridHeight) {
+        this.pushEvent('toggle_cell', { row: row, col: col })
+      }
+    })
+    
+    // Initial render
+    this.render()
+  },
+  
+  updated() {
+    this.render()
+  },
+  
+  render() {
+    const grid = JSON.parse(this.el.dataset.grid || '{}')
+    const ctx = this.ctx
+    
+    // Clear canvas
+    ctx.fillStyle = '#2a2a2a' // Dark background
+    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    
+    // Draw grid lines (optional - can be removed for better performance)
+    ctx.strokeStyle = '#3a3a3a'
+    ctx.lineWidth = 1
+    
+    // Vertical lines
+    for (let i = 0; i <= this.gridWidth; i++) {
+      ctx.beginPath()
+      ctx.moveTo(i * this.cellSize, 0)
+      ctx.lineTo(i * this.cellSize, this.canvas.height)
+      ctx.stroke()
+    }
+    
+    // Horizontal lines
+    for (let i = 0; i <= this.gridHeight; i++) {
+      ctx.beginPath()
+      ctx.moveTo(0, i * this.cellSize)
+      ctx.lineTo(this.canvas.width, i * this.cellSize)
+      ctx.stroke()
+    }
+    
+    // Draw live cells
+    ctx.fillStyle = '#4ade80' // Green for live cells
+    Object.keys(grid).forEach(key => {
+      if (grid[key]) {
+        const [row, col] = key.split(',').map(Number)
+        ctx.fillRect(
+          col * this.cellSize + 1,
+          row * this.cellSize + 1,
+          this.cellSize - 2,
+          this.cellSize - 2
+        )
+      }
+    })
+  }
+}
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks},
+  hooks: {GameCanvas},
 })
 
 // Show progress bar on live navigation and form submits

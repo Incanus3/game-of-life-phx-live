@@ -133,17 +133,20 @@ defmodule GameOfLifeWeb.GameLive do
         </div>
       </div>
 
-      <div class="game-grid" style={"grid-template-columns: repeat(#{@game_state.width}, 12px); grid-template-rows: repeat(#{@game_state.height}, 12px);"}> 
-        <%= for row <- 0..(@game_state.height - 1), col <- 0..(@game_state.width - 1) do %>
-          <div
-            class={["cell", if(get_cell_state(@game_state.grid, row, col), do: "alive", else: "dead")]}
-            phx-click="toggle_cell"
-            phx-value-row={row}
-            phx-value-col={col}
-          >
-          </div>
-        <% end %>
-      </div>
+      <canvas
+        id="game-canvas"
+        width={@game_state.width * 12}
+        height={@game_state.height * 12}
+        phx-hook="GameCanvas"
+        phx-update="ignore"
+        data-width={@game_state.width}
+        data-height={@game_state.height}
+        data-grid={Jason.encode!(grid_to_json(@game_state.grid))}
+        data-generation={@game_state.generation}
+        class="game-canvas"
+      >
+        Your browser doesn't support HTML5 Canvas.
+      </canvas>
 
       <div class="instructions">
         <h3>Instructions:</h3>
@@ -164,9 +167,11 @@ defmodule GameOfLifeWeb.GameLive do
     </div>
     """
   end
-
-  # Helper function to get cell state from the grid
-  defp get_cell_state(grid, row, col) do
-    Map.get(grid, {row, col}, false)
+  
+  # Helper function to convert grid with tuple keys to JSON-encodable format
+  defp grid_to_json(grid) do
+    for {{row, col}, _value} <- grid, into: %{} do
+      {"#{row},#{col}", true}
+    end
   end
 end
