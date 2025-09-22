@@ -81,34 +81,8 @@ defmodule GameOfLife.Grid do
   # Private functions
 
   @doc false
-  # Get all cells that could possibly change state
-  defp get_cells_to_check(grid, width, height) do
-    grid
-    |> Map.keys()
-    |> Enum.flat_map(fn {row, col} ->
-      # For each live cell, include itself and all neighbors
-      neighbors = [
-        {row - 1, col - 1},
-        {row - 1, col},
-        {row - 1, col + 1},
-        {row, col - 1},
-        {row, col},
-        {row, col + 1},
-        {row + 1, col - 1},
-        {row + 1, col},
-        {row + 1, col + 1}
-      ]
-
-      Enum.filter(neighbors, fn {r, c} ->
-        valid_coordinates?(r, c, width, height)
-      end)
-    end)
-    |> Enum.uniq()
-  end
-
-  @doc false
-  # Optimized neighbor counting using direct map lookups
-  defp count_live_neighbors(grid, row, col, width, height) do
+  # Get all neighbor coordinates for a given cell (8-directional)
+  defp get_neighbor_coordinates(row, col) do
     [
       {row - 1, col - 1},
       {row - 1, col},
@@ -119,6 +93,29 @@ defmodule GameOfLife.Grid do
       {row + 1, col},
       {row + 1, col + 1}
     ]
+  end
+
+  @doc false
+  # Get all cells that could possibly change state
+  defp get_cells_to_check(grid, width, height) do
+    grid
+    |> Map.keys()
+    |> Enum.flat_map(fn {row, col} ->
+      # For each live cell, include itself and all neighbors
+      cell_and_neighbors = [{row, col} | get_neighbor_coordinates(row, col)]
+
+      Enum.filter(cell_and_neighbors, fn {r, c} ->
+        valid_coordinates?(r, c, width, height)
+      end)
+    end)
+    |> Enum.uniq()
+  end
+
+  @doc false
+  # Optimized neighbor counting using direct map lookups
+  defp count_live_neighbors(grid, row, col, width, height) do
+    row
+    |> get_neighbor_coordinates(col)
     |> Enum.count(fn {r, c} ->
       valid_coordinates?(r, c, width, height) and Map.has_key?(grid, {r, c})
     end)
