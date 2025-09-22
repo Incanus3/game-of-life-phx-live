@@ -27,6 +27,7 @@ defmodule GameOfLife.Grid do
   def set_cell(grid, row, col, true) do
     Map.put(grid, {row, col}, true)
   end
+
   def set_cell(grid, row, col, false) do
     Map.delete(grid, {row, col})
   end
@@ -45,20 +46,26 @@ defmodule GameOfLife.Grid do
   def evolve_grid(grid, width, height) do
     # Get all cells that need to be checked (live cells + their neighbors)
     cells_to_check = get_cells_to_check(grid, width, height)
-    
+
     # Process only the relevant cells
     Enum.reduce(cells_to_check, %{}, fn {row, col}, new_grid ->
       current_alive = get_cell(grid, row, col)
       neighbor_count = count_live_neighbors(grid, row, col, width, height)
-      
-      new_state = case {current_alive, neighbor_count} do
-        {true, n} when n < 2 -> false    # Dies from underpopulation
-        {true, n} when n in [2, 3] -> true    # Survives
-        {true, n} when n > 3 -> false    # Dies from overpopulation
-        {false, 3} -> true               # Born from reproduction
-        {false, _} -> false              # Stays dead
-      end
-      
+
+      new_state =
+        case {current_alive, neighbor_count} do
+          # Dies from underpopulation
+          {true, n} when n < 2 -> false
+          # Survives
+          {true, n} when n in [2, 3] -> true
+          # Dies from overpopulation
+          {true, n} when n > 3 -> false
+          # Born from reproduction
+          {false, 3} -> true
+          # Stays dead
+          {false, _} -> false
+        end
+
       set_cell(new_grid, row, col, new_state)
     end)
   end
@@ -81,12 +88,18 @@ defmodule GameOfLife.Grid do
     |> Enum.flat_map(fn {row, col} ->
       # For each live cell, include itself and all neighbors
       neighbors = [
-        {row - 1, col - 1}, {row - 1, col}, {row - 1, col + 1},
-        {row, col - 1}, {row, col}, {row, col + 1},
-        {row + 1, col - 1}, {row + 1, col}, {row + 1, col + 1}
+        {row - 1, col - 1},
+        {row - 1, col},
+        {row - 1, col + 1},
+        {row, col - 1},
+        {row, col},
+        {row, col + 1},
+        {row + 1, col - 1},
+        {row + 1, col},
+        {row + 1, col + 1}
       ]
-      
-      Enum.filter(neighbors, fn {r, c} -> 
+
+      Enum.filter(neighbors, fn {r, c} ->
         valid_coordinates?(r, c, width, height)
       end)
     end)
@@ -97,9 +110,14 @@ defmodule GameOfLife.Grid do
   # Optimized neighbor counting using direct map lookups
   defp count_live_neighbors(grid, row, col, width, height) do
     [
-      {row - 1, col - 1}, {row - 1, col}, {row - 1, col + 1},
-      {row, col - 1},                       {row, col + 1},
-      {row + 1, col - 1}, {row + 1, col}, {row + 1, col + 1}
+      {row - 1, col - 1},
+      {row - 1, col},
+      {row - 1, col + 1},
+      {row, col - 1},
+      {row, col + 1},
+      {row + 1, col - 1},
+      {row + 1, col},
+      {row + 1, col + 1}
     ]
     |> Enum.count(fn {r, c} ->
       valid_coordinates?(r, c, width, height) and Map.has_key?(grid, {r, c})

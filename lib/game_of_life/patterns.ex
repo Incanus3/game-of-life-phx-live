@@ -23,7 +23,7 @@ defmodule GameOfLife.Patterns do
         "blinker" => [
           [true, true, true]
         ],
-        
+
         # Period 2 oscillators
         "toad" => [
           [false, true, true, true],
@@ -35,7 +35,7 @@ defmodule GameOfLife.Patterns do
           [false, false, true, true],
           [false, false, true, true]
         ],
-        
+
         # Spaceships
         "lightweight_spaceship" => [
           [false, true, false, false, true],
@@ -50,24 +50,66 @@ defmodule GameOfLife.Patterns do
           [true, false, false, false, false, true],
           [true, true, true, true, true, false]
         ],
-        
+
         # Oscillators
         "pulsar" => [
           [false, false, true, true, true, false, false, false, true, true, true, false, false],
-          [false, false, false, false, false, false, false, false, false, false, false, false, false],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
           [true, false, false, false, false, true, false, true, false, false, false, false, true],
           [true, false, false, false, false, true, false, true, false, false, false, false, true],
           [true, false, false, false, false, true, false, true, false, false, false, false, true],
           [false, false, true, true, true, false, false, false, true, true, true, false, false],
-          [false, false, false, false, false, false, false, false, false, false, false, false, false],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
           [false, false, true, true, true, false, false, false, true, true, true, false, false],
           [true, false, false, false, false, true, false, true, false, false, false, false, true],
           [true, false, false, false, false, true, false, true, false, false, false, false, true],
           [true, false, false, false, false, true, false, true, false, false, false, false, true],
-          [false, false, false, false, false, false, false, false, false, false, false, false, false],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
           [false, false, true, true, true, false, false, false, true, true, true, false, false]
         ],
-        
+
         # Interesting patterns
         "pentadecathlon" => [
           [false, false, true, false, false, false, false, true, false, false],
@@ -79,20 +121,353 @@ defmodule GameOfLife.Patterns do
           [true, true, false],
           [false, true, false]
         ],
-        
+
         # Glider gun (classic pattern that generates gliders)
         "gosper_glider_gun" => [
-          [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false],
-          [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, false, false, false, false, false, false, false, false, false],
-          [false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true],
-          [false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true],
-          [true, true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-          [true, true, false, false, false, false, false, false, false, false, true, false, false, false, true, false, true, true, false, false, false, false, true, false, true, false, false, false, false, false, false, false, false, false, false, false],
-          [false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false],
-          [false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-          [false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
         ],
-        
+
         # Methuselah patterns (evolve for a long time)
         "diehard" => [
           [false, false, false, false, false, false, true, false],
@@ -104,7 +479,7 @@ defmodule GameOfLife.Patterns do
           [false, false, false, true, false, false, false],
           [true, true, false, false, true, true, true]
         ],
-        
+
         # Still lifes
         "beehive" => [
           [false, true, true, false],
@@ -125,34 +500,41 @@ defmodule GameOfLife.Patterns do
       },
       # Pattern categories with names and tooltips
       categories: [
-        {"Basic Patterns", [
-          {"glider", "Glider", "Classic diagonal spaceship that moves across the grid"},
-          {"block", "Block", "Simple 2×2 still life that never changes"},
-          {"blinker", "Blinker", "Simple period-2 oscillator (3 cells in a line)"}
-        ]},
-        {"Oscillators", [
-          {"toad", "Toad", "Period-2 oscillator that rocks back and forth"},
-          {"beacon", "Beacon", "Period-2 oscillator with flashing corner"},
-          {"pulsar", "Pulsar", "Beautiful period-3 oscillator (13×13)"},
-          {"pentadecathlon", "Pentadecathlon", "Period-15 oscillator (10×3)"}
-        ]},
-        {"Spaceships", [
-          {"lightweight_spaceship", "Lightweight Spaceship", "Travels horizontally every 4 generations"},
-          {"middleweight_spaceship", "Middleweight Spaceship", "Larger, faster spaceship"}
-        ]},
-        {"Glider Guns", [
-          {"gosper_glider_gun", "Gosper Glider Gun", "Continuously creates gliders! (36×9)"}
-        ]},
-        {"Methuselahs", [
-          {"r_pentomino", "R-Pentomino", "Evolves for 1,103 generations before stabilizing"},
-          {"diehard", "Diehard", "Lives for exactly 130 generations then dies completely"},
-          {"acorn", "Acorn", "Takes 5,206 generations to stabilize (amazing!)"}
-        ]},
-        {"Still Lifes", [
-          {"beehive", "Beehive", "Hexagonal stable pattern"},
-          {"loaf", "Loaf", "Asymmetric stable pattern with a 'bite' taken out"},
-          {"boat", "Boat", "Small 3×3 stable pattern"}
-        ]}
+        {"Basic Patterns",
+         [
+           {"glider", "Glider", "Classic diagonal spaceship that moves across the grid"},
+           {"block", "Block", "Simple 2×2 still life that never changes"},
+           {"blinker", "Blinker", "Simple period-2 oscillator (3 cells in a line)"}
+         ]},
+        {"Oscillators",
+         [
+           {"toad", "Toad", "Period-2 oscillator that rocks back and forth"},
+           {"beacon", "Beacon", "Period-2 oscillator with flashing corner"},
+           {"pulsar", "Pulsar", "Beautiful period-3 oscillator (13×13)"},
+           {"pentadecathlon", "Pentadecathlon", "Period-15 oscillator (10×3)"}
+         ]},
+        {"Spaceships",
+         [
+           {"lightweight_spaceship", "Lightweight Spaceship",
+            "Travels horizontally every 4 generations"},
+           {"middleweight_spaceship", "Middleweight Spaceship", "Larger, faster spaceship"}
+         ]},
+        {"Glider Guns",
+         [
+           {"gosper_glider_gun", "Gosper Glider Gun", "Continuously creates gliders! (36×9)"}
+         ]},
+        {"Methuselahs",
+         [
+           {"r_pentomino", "R-Pentomino", "Evolves for 1,103 generations before stabilizing"},
+           {"diehard", "Diehard", "Lives for exactly 130 generations then dies completely"},
+           {"acorn", "Acorn", "Takes 5,206 generations to stabilize (amazing!)"}
+         ]},
+        {"Still Lifes",
+         [
+           {"beehive", "Beehive", "Hexagonal stable pattern"},
+           {"loaf", "Loaf", "Asymmetric stable pattern with a 'bite' taken out"},
+           {"boat", "Boat", "Small 3×3 stable pattern"}
+         ]}
       ]
     }
   end
@@ -164,14 +546,14 @@ defmodule GameOfLife.Patterns do
   def load_pattern_onto_grid(pattern, _grid, width, height) do
     # Start with empty grid (sparse representation)
     empty_grid = %{}
-    
+
     # Calculate starting position to center the pattern
     pattern_height = length(pattern)
     pattern_width = if pattern_height > 0, do: length(hd(pattern)), else: 0
-    
+
     start_row = div(height - pattern_height, 2)
     start_col = div(width - pattern_width, 2)
-    
+
     # Place only the live cells from the pattern
     pattern
     |> Enum.with_index()
@@ -181,7 +563,7 @@ defmodule GameOfLife.Patterns do
       |> Enum.reduce(acc_grid, fn {cell, col_idx}, inner_grid ->
         actual_row = start_row + row_idx
         actual_col = start_col + col_idx
-        
+
         if valid_coordinates?(actual_row, actual_col, width, height) and cell do
           Map.put(inner_grid, {actual_row, actual_col}, true)
         else

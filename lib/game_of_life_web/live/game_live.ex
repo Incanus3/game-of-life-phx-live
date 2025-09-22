@@ -73,38 +73,38 @@ defmodule GameOfLifeWeb.GameLive do
   def render(assigns) do
     ~H"""
     <div class="game-of-life-container">
-      <%= render_header(assigns) %>
-      <%= render_controls(assigns) %>
-      <%= render_game_canvas(assigns) %>
-      <%= render_instructions(assigns) %>
+      {render_header(assigns)}
+      {render_controls(assigns)}
+      {render_game_canvas(assigns)}
+      {render_instructions(assigns)}
     </div>
     """
   end
-  
+
   # Private render functions for better maintainability
-  
+
   defp render_header(assigns) do
     ~H"""
     <div class="header">
       <h1>Conway's Game of Life</h1>
       <div class="stats">
-        <span>Generation: <%= @game_state.generation %></span>
-        <span>Status: <%= if @game_state.playing, do: "Playing", else: "Paused" %></span>
+        <span>Generation: {@game_state.generation}</span>
+        <span>Status: {if @game_state.playing, do: "Playing", else: "Paused"}</span>
       </div>
     </div>
     """
   end
-  
+
   defp render_controls(assigns) do
     ~H"""
     <div class="controls">
-      <%= render_game_controls(assigns) %>
-      <%= render_speed_control(assigns) %>
-      <%= render_pattern_control(assigns) %>
+      {render_game_controls(assigns)}
+      {render_speed_control(assigns)}
+      {render_pattern_control(assigns)}
     </div>
     """
   end
-  
+
   defp render_game_controls(assigns) do
     ~H"""
     <div class="control-group">
@@ -112,13 +112,13 @@ defmodule GameOfLifeWeb.GameLive do
         phx-click={if @game_state.playing, do: "pause", else: "play"}
         class={["btn", if(@game_state.playing, do: "btn-pause", else: "btn-play")]}
       >
-        <%= if @game_state.playing, do: "⏸ Pause", else: "▶ Play" %>
+        {if @game_state.playing, do: "⏸ Pause", else: "▶ Play"}
       </button>
       <button phx-click="reset" class="btn btn-reset">🔄 Reset</button>
     </div>
     """
   end
-  
+
   defp render_speed_control(assigns) do
     ~H"""
     <div class="control-group">
@@ -134,11 +134,11 @@ defmodule GameOfLifeWeb.GameLive do
           value={@game_state.speed}
         />
       </form>
-      <span><%= @game_state.speed %>ms</span>
+      <span>{@game_state.speed}ms</span>
     </div>
     """
   end
-  
+
   defp render_pattern_control(assigns) do
     ~H"""
     <div class="control-group">
@@ -150,11 +150,11 @@ defmodule GameOfLifeWeb.GameLive do
               <%= for {pattern_key, pattern_name, tooltip} <- patterns do %>
                 <%= if pattern_key == @selected_pattern do %>
                   <option value={pattern_key} selected title={tooltip}>
-                    <%= pattern_name %>
+                    {pattern_name}
                   </option>
                 <% else %>
                   <option value={pattern_key} title={tooltip}>
-                    <%= pattern_name %>
+                    {pattern_name}
                   </option>
                 <% end %>
               <% end %>
@@ -166,7 +166,7 @@ defmodule GameOfLifeWeb.GameLive do
     </div>
     """
   end
-  
+
   defp render_game_canvas(assigns) do
     ~H"""
     <canvas
@@ -185,7 +185,7 @@ defmodule GameOfLifeWeb.GameLive do
     </canvas>
     """
   end
-  
+
   defp render_instructions(assigns) do
     ~H"""
     <div class="instructions">
@@ -206,7 +206,7 @@ defmodule GameOfLifeWeb.GameLive do
     </div>
     """
   end
-  
+
   # Helper function to convert grid with tuple keys to JSON-encodable format
   defp grid_to_json(grid) do
     for {{row, col}, _value} <- grid, into: %{} do

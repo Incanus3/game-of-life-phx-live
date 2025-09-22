@@ -3,7 +3,7 @@ defmodule GameOfLife.Game do
   GenServer implementation for Game of Life that coordinates between 
   the Grid (core logic) and Patterns (pattern management) modules.
   """
-  
+
   use GenServer
   require Logger
 
@@ -100,7 +100,7 @@ defmodule GameOfLife.Game do
   @impl true
   def handle_cast(:reset, state) do
     if state.timer_ref, do: Process.cancel_timer(state.timer_ref)
-    
+
     new_state = %{
       state
       | grid: Grid.create_empty_grid(state.width, state.height),
@@ -108,7 +108,7 @@ defmodule GameOfLife.Game do
         playing: false,
         timer_ref: nil
     }
-    
+
     broadcast_state_change(new_state)
     {:noreply, new_state}
   end
@@ -128,16 +128,17 @@ defmodule GameOfLife.Game do
   @impl true
   def handle_cast({:set_speed, speed}, state) do
     new_state = %{state | speed: speed}
-    
+
     # If currently playing, restart timer with new speed
-    new_state = if state.playing do
-      if state.timer_ref, do: Process.cancel_timer(state.timer_ref)
-      timer_ref = schedule_next_generation(speed)
-      %{new_state | timer_ref: timer_ref}
-    else
-      new_state
-    end
-    
+    new_state =
+      if state.playing do
+        if state.timer_ref, do: Process.cancel_timer(state.timer_ref)
+        timer_ref = schedule_next_generation(speed)
+        %{new_state | timer_ref: timer_ref}
+      else
+        new_state
+      end
+
     broadcast_state_change(new_state)
     {:noreply, new_state}
   end
@@ -156,14 +157,14 @@ defmodule GameOfLife.Game do
       new_grid = Grid.evolve_grid(state.grid, state.width, state.height)
       new_generation = state.generation + 1
       timer_ref = schedule_next_generation(state.speed)
-      
+
       new_state = %{
         state
         | grid: new_grid,
           generation: new_generation,
           timer_ref: timer_ref
       }
-      
+
       broadcast_state_change(new_state)
       {:noreply, new_state}
     else
@@ -180,5 +181,4 @@ defmodule GameOfLife.Game do
   defp broadcast_state_change(state) do
     Phoenix.PubSub.broadcast(GameOfLife.PubSub, "game_state", {:state_change, state})
   end
-
 end

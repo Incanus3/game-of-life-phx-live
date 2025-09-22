@@ -13,7 +13,7 @@ defmodule GameOfLife.GridTest do
       grid1 = Grid.create_empty_grid(1, 1)
       grid2 = Grid.create_empty_grid(100, 50)
       grid3 = Grid.create_empty_grid(0, 0)
-      
+
       assert grid1 == %{}
       assert grid2 == %{}
       assert grid3 == %{}
@@ -30,7 +30,7 @@ defmodule GameOfLife.GridTest do
     test "returns true for live cells" do
       grid = Grid.create_empty_grid(10, 10)
       grid = Grid.set_cell(grid, 5, 5, true)
-      
+
       assert Grid.get_cell(grid, 5, 5) == true
       assert Grid.get_cell(grid, 0, 0) == false
     end
@@ -39,7 +39,7 @@ defmodule GameOfLife.GridTest do
       grid = Grid.create_empty_grid(10, 10)
       grid = Grid.set_cell(grid, 0, 0, true)
       grid = Grid.set_cell(grid, 9, 9, true)
-      
+
       assert Grid.get_cell(grid, 0, 0) == true
       assert Grid.get_cell(grid, 9, 9) == true
       assert Grid.get_cell(grid, 1, 1) == false
@@ -50,7 +50,7 @@ defmodule GameOfLife.GridTest do
     test "sets cell to alive" do
       grid = Grid.create_empty_grid(10, 10)
       grid = Grid.set_cell(grid, 5, 5, true)
-      
+
       assert Grid.get_cell(grid, 5, 5) == true
       assert map_size(grid) == 1
       assert grid == %{{5, 5} => true}
@@ -60,7 +60,7 @@ defmodule GameOfLife.GridTest do
       grid = Grid.create_empty_grid(10, 10)
       grid = Grid.set_cell(grid, 5, 5, true)
       assert Grid.get_cell(grid, 5, 5) == true
-      
+
       grid = Grid.set_cell(grid, 5, 5, false)
       assert Grid.get_cell(grid, 5, 5) == false
       assert map_size(grid) == 0
@@ -71,7 +71,7 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 0, 0, true)
       grid = Grid.set_cell(grid, 5, 5, true)
       grid = Grid.set_cell(grid, 9, 9, true)
-      
+
       assert Grid.get_cell(grid, 0, 0) == true
       assert Grid.get_cell(grid, 5, 5) == true
       assert Grid.get_cell(grid, 9, 9) == true
@@ -82,7 +82,7 @@ defmodule GameOfLife.GridTest do
       grid = Grid.create_empty_grid(10, 10)
       grid = Grid.set_cell(grid, 5, 5, true)
       assert Grid.get_cell(grid, 5, 5) == true
-      
+
       grid = Grid.set_cell(grid, 5, 5, true)
       assert Grid.get_cell(grid, 5, 5) == true
       assert map_size(grid) == 1
@@ -122,7 +122,7 @@ defmodule GameOfLife.GridTest do
     test "toggles dead cell to alive" do
       grid = Grid.create_empty_grid(10, 10)
       assert Grid.get_cell(grid, 5, 5) == false
-      
+
       grid = Grid.toggle_cell(grid, 5, 5)
       assert Grid.get_cell(grid, 5, 5) == true
     end
@@ -131,7 +131,7 @@ defmodule GameOfLife.GridTest do
       grid = Grid.create_empty_grid(10, 10)
       grid = Grid.set_cell(grid, 5, 5, true)
       assert Grid.get_cell(grid, 5, 5) == true
-      
+
       grid = Grid.toggle_cell(grid, 5, 5)
       assert Grid.get_cell(grid, 5, 5) == false
     end
@@ -139,10 +139,10 @@ defmodule GameOfLife.GridTest do
     test "multiple toggles return to original state" do
       grid = Grid.create_empty_grid(10, 10)
       original_state = Grid.get_cell(grid, 5, 5)
-      
+
       grid = Grid.toggle_cell(grid, 5, 5)
       grid = Grid.toggle_cell(grid, 5, 5)
-      
+
       assert Grid.get_cell(grid, 5, 5) == original_state
     end
   end
@@ -151,16 +151,16 @@ defmodule GameOfLife.GridTest do
     test "empty grid stays empty" do
       grid = Grid.create_empty_grid(10, 10)
       new_grid = Grid.evolve_grid(grid, 10, 10)
-      
+
       assert new_grid == %{}
     end
 
     test "single cell dies from underpopulation" do
       grid = Grid.create_empty_grid(10, 10)
       grid = Grid.set_cell(grid, 5, 5, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 10, 10)
-      
+
       assert Grid.get_cell(new_grid, 5, 5) == false
     end
 
@@ -170,9 +170,9 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 5, 5, true)
       grid = Grid.set_cell(grid, 4, 5, true)
       grid = Grid.set_cell(grid, 5, 4, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 10, 10)
-      
+
       # Cell at (5,5) should survive with 2 neighbors
       assert Grid.get_cell(new_grid, 5, 5) == true
     end
@@ -184,9 +184,9 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 4, 5, true)
       grid = Grid.set_cell(grid, 6, 5, true)
       grid = Grid.set_cell(grid, 5, 4, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 10, 10)
-      
+
       # Cell at (5,5) should survive with 3 neighbors
       assert Grid.get_cell(new_grid, 5, 5) == true
     end
@@ -199,9 +199,9 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 6, 5, true)
       grid = Grid.set_cell(grid, 5, 4, true)
       grid = Grid.set_cell(grid, 5, 6, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 10, 10)
-      
+
       # Cell at (5,5) should die from overpopulation (4 neighbors)
       assert Grid.get_cell(new_grid, 5, 5) == false
     end
@@ -212,9 +212,9 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 4, 5, true)
       grid = Grid.set_cell(grid, 5, 4, true)
       grid = Grid.set_cell(grid, 6, 5, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 10, 10)
-      
+
       # Cell at (5,5) should be born with exactly 3 neighbors
       assert Grid.get_cell(new_grid, 5, 5) == true
     end
@@ -224,9 +224,9 @@ defmodule GameOfLife.GridTest do
       grid = Grid.create_empty_grid(10, 10)
       grid = Grid.set_cell(grid, 4, 5, true)
       grid = Grid.set_cell(grid, 6, 5, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 10, 10)
-      
+
       # Cell at (5,5) should stay dead (only 2 neighbors)
       assert Grid.get_cell(new_grid, 5, 5) == false
     end
@@ -237,19 +237,19 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 1, 2, true)
       grid = Grid.set_cell(grid, 2, 2, true)
       grid = Grid.set_cell(grid, 3, 2, true)
-      
+
       # After one evolution, should become horizontal
       new_grid = Grid.evolve_grid(grid, 5, 5)
-      
+
       assert Grid.get_cell(new_grid, 1, 2) == false
       assert Grid.get_cell(new_grid, 2, 1) == true
       assert Grid.get_cell(new_grid, 2, 2) == true
       assert Grid.get_cell(new_grid, 2, 3) == true
       assert Grid.get_cell(new_grid, 3, 2) == false
-      
+
       # After second evolution, should return to vertical
       final_grid = Grid.evolve_grid(new_grid, 5, 5)
-      
+
       assert Grid.get_cell(final_grid, 1, 2) == true
       assert Grid.get_cell(final_grid, 2, 1) == false
       assert Grid.get_cell(final_grid, 2, 2) == true
@@ -264,9 +264,9 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 5, 6, true)
       grid = Grid.set_cell(grid, 6, 5, true)
       grid = Grid.set_cell(grid, 6, 6, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 10, 10)
-      
+
       # Should remain unchanged
       assert Grid.get_cell(new_grid, 5, 5) == true
       assert Grid.get_cell(new_grid, 5, 6) == true
@@ -281,12 +281,12 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 0, 0, true)
       grid = Grid.set_cell(grid, 0, 1, true)
       grid = Grid.set_cell(grid, 1, 0, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 3, 3)
-      
+
       # Should evolve correctly without going out of bounds
       assert is_map(new_grid)
-      
+
       # All cells in new_grid should be within bounds
       Enum.all?(Map.keys(new_grid), fn {row, col} ->
         Grid.valid_coordinates?(row, col, 3, 3)
@@ -299,13 +299,14 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 500, 500, true)
       grid = Grid.set_cell(grid, 500, 501, true)
       grid = Grid.set_cell(grid, 501, 500, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 1000, 1000)
-      
+
       # Should handle efficiently and produce result
       assert is_map(new_grid)
       # The sparse representation should still be small
-      assert map_size(new_grid) <= 10  # Much smaller than 1M cells
+      # Much smaller than 1M cells
+      assert map_size(new_grid) <= 10
     end
   end
 
@@ -313,16 +314,16 @@ defmodule GameOfLife.GridTest do
     test "grid operations work with zero dimensions" do
       grid = Grid.create_empty_grid(0, 0)
       new_grid = Grid.evolve_grid(grid, 0, 0)
-      
+
       assert new_grid == %{}
     end
 
     test "grid operations work with single dimension" do
       grid = Grid.create_empty_grid(1, 1)
       grid = Grid.set_cell(grid, 0, 0, true)
-      
+
       new_grid = Grid.evolve_grid(grid, 1, 1)
-      
+
       # Single cell should die (no neighbors)
       assert Grid.get_cell(new_grid, 0, 0) == false
     end
@@ -343,26 +344,26 @@ defmodule GameOfLife.GridTest do
       grid = Grid.set_cell(grid, 3, 1, true)
       grid = Grid.set_cell(grid, 3, 2, true)
       grid = Grid.set_cell(grid, 3, 3, true)
-      
+
       # Evolution 1
       gen1 = Grid.evolve_grid(grid, 10, 10)
-      
+
       # Evolution 2  
       gen2 = Grid.evolve_grid(gen1, 10, 10)
-      
+
       # Evolution 3
       gen3 = Grid.evolve_grid(gen2, 10, 10)
-      
+
       # Evolution 4 - should be similar to original but shifted
       gen4 = Grid.evolve_grid(gen3, 10, 10)
-      
+
       # Verify the glider has moved (exact positions depend on Conway's rules)
       # At minimum, verify that evolution produces different valid states
       assert gen1 != grid
       assert gen2 != gen1
       assert gen3 != gen2
       assert gen4 != gen3
-      
+
       # All generations should have some living cells (glider persists)
       assert map_size(gen1) > 0
       assert map_size(gen2) > 0

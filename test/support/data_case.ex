@@ -18,41 +18,27 @@ defmodule GameOfLife.DataCase do
 
   using do
     quote do
-      alias GameOfLife.Repo
-
-      import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
       import GameOfLife.DataCase
     end
   end
 
-  setup tags do
-    GameOfLife.DataCase.setup_sandbox(tags)
+  setup _tags do
     :ok
   end
 
   @doc """
   Sets up the sandbox based on the test tags.
+  No-op since this project doesn't use a database.
   """
-  def setup_sandbox(tags) do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(GameOfLife.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+  def setup_sandbox(_tags) do
+    :ok
   end
 
   @doc """
   A helper that transforms changeset errors into a map of messages.
-
-      assert {:error, changeset} = Accounts.create_user(%{password: "short"})
-      assert "password is too short" in errors_on(changeset).password
-      assert %{password: ["password is too short"]} = errors_on(changeset)
-
+  No-op since this project doesn't use Ecto changesets.
   """
-  def errors_on(changeset) do
-    Ecto.Changeset.traverse_errors(changeset, fn {message, opts} ->
-      Regex.replace(~r"%{(\w+)}", message, fn _, key ->
-        opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()
-      end)
-    end)
+  def errors_on(_changeset) do
+    %{}
   end
 end
