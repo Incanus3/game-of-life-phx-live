@@ -51,20 +51,7 @@ defmodule GameOfLife.Grid do
     Enum.reduce(cells_to_check, %{}, fn {row, col}, new_grid ->
       current_alive = get_cell(grid, row, col)
       neighbor_count = count_live_neighbors(grid, row, col, width, height)
-
-      new_state =
-        case {current_alive, neighbor_count} do
-          # Dies from underpopulation
-          {true, n} when n < 2 -> false
-          # Survives
-          {true, n} when n in [2, 3] -> true
-          # Dies from overpopulation
-          {true, n} when n > 3 -> false
-          # Born from reproduction
-          {false, 3} -> true
-          # Stays dead
-          {false, _} -> false
-        end
+      new_state = apply_conways_rules(current_alive, neighbor_count)
 
       set_cell(new_grid, row, col, new_state)
     end)
@@ -119,5 +106,22 @@ defmodule GameOfLife.Grid do
     |> Enum.count(fn {r, c} ->
       valid_coordinates?(r, c, width, height) and Map.has_key?(grid, {r, c})
     end)
+  end
+
+  @doc false
+  # Apply Conway's Game of Life rules to determine next state
+  defp apply_conways_rules(current_alive, neighbor_count) do
+    case {current_alive, neighbor_count} do
+      # Dies from underpopulation
+      {true, n} when n < 2 -> false
+      # Survives
+      {true, n} when n in [2, 3] -> true
+      # Dies from overpopulation
+      {true, n} when n > 3 -> false
+      # Born from reproduction
+      {false, 3} -> true
+      # Stays dead
+      {false, _} -> false
+    end
   end
 end

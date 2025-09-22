@@ -20,12 +20,6 @@ config :game_of_life, GameOfLifeWeb.Endpoint,
   secret_key_base: "jOCHcfkiCa/JvGyBmaInEGNv/sE5chGAQTPo5cWNP1t3w9tn9eOtGhUJTQr10757",
   server: false
 
-# In test we don't send emails
-config :game_of_life, GameOfLife.Mailer, adapter: Swoosh.Adapters.Test
-
-# Disable swoosh api client as it is only required for production adapters
-config :swoosh, :api_client, false
-
 # Print only warnings and errors during test
 config :logger, level: :warning
 

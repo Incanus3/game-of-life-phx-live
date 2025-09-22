@@ -22,15 +22,6 @@ config :game_of_life, GameOfLifeWeb.Endpoint,
   pubsub_server: GameOfLife.PubSub,
   live_view: [signing_salt: "1vFMyYS/"]
 
-# Configures the mailer
-#
-# By default it uses the "Local" adapter which stores the emails
-# locally. You can see the emails in your browser, at "/dev/mailbox".
-#
-# For production it's recommended to configure a different adapter
-# at the `config/runtime.exs`.
-config :game_of_life, GameOfLife.Mailer, adapter: Swoosh.Adapters.Local
-
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.25.4",
