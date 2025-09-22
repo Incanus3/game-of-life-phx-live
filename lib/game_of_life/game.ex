@@ -163,26 +163,35 @@ defmodule GameOfLife.Game do
 
   # Private functions
 
-  defp create_empty_grid(width, height) do
-    for row <- 0..(height - 1), col <- 0..(width - 1), into: %{} do
-      {{row, col}, false}
-    end
+  # Use sparse grid - only store live cells for better performance
+  defp create_empty_grid(_width, _height) do
+    %{}
   end
 
+  # In sparse grid, if cell is not in map, it's dead (false)
   defp get_cell(grid, row, col) do
-    Map.get(grid, {row, col}, false)
+    Map.has_key?(grid, {row, col})
   end
 
-  defp set_cell(grid, row, col, value) do
-    Map.put(grid, {row, col}, value)
+  # In sparse grid, only store live cells
+  defp set_cell(grid, row, col, true) do
+    Map.put(grid, {row, col}, true)
+  end
+  defp set_cell(grid, row, col, false) do
+    Map.delete(grid, {row, col})
   end
 
   defp valid_coordinates?(row, col, width, height) do
     row >= 0 and row < height and col >= 0 and col < width
   end
 
+  # Optimized evolution - only check cells that could change
   defp evolve_grid(grid, width, height) do
-    for row <- 0..(height - 1), col <- 0..(width - 1), into: %{} do
+    # Get all cells that need to be checked (live cells + their neighbors)
+    cells_to_check = get_cells_to_check(grid, width, height)
+    
+    # Process only the relevant cells
+    Enum.reduce(cells_to_check, %{}, fn {row, col}, new_grid ->
       current_alive = get_cell(grid, row, col)
       neighbor_count = count_live_neighbors(grid, row, col, width, height)
       
@@ -194,20 +203,39 @@ defmodule GameOfLife.Game do
         {false, _} -> false              # Stays dead
       end
       
-      {{row, col}, new_state}
-    end
+      set_cell(new_grid, row, col, new_state)
+    end)
+  end
+  
+  # Get all cells that could possibly change state
+  defp get_cells_to_check(grid, width, height) do
+    grid
+    |> Map.keys()
+    |> Enum.flat_map(fn {row, col} ->
+      # For each live cell, include itself and all neighbors
+      neighbors = [
+        {row - 1, col - 1}, {row - 1, col}, {row - 1, col + 1},
+        {row, col - 1}, {row, col}, {row, col + 1},
+        {row + 1, col - 1}, {row + 1, col}, {row + 1, col + 1}
+      ]
+      
+      Enum.filter(neighbors, fn {r, c} -> 
+        valid_coordinates?(r, c, width, height)
+      end)
+    end)
+    |> Enum.uniq()
   end
 
+  # Optimized neighbor counting - direct map lookups
   defp count_live_neighbors(grid, row, col, width, height) do
-    neighbors = [
+    [
       {row - 1, col - 1}, {row - 1, col}, {row - 1, col + 1},
       {row, col - 1},                       {row, col + 1},
       {row + 1, col - 1}, {row + 1, col}, {row + 1, col + 1}
     ]
-    
-    neighbors
-    |> Enum.filter(fn {r, c} -> valid_coordinates?(r, c, width, height) end)
-    |> Enum.count(fn {r, c} -> get_cell(grid, r, c) end)
+    |> Enum.count(fn {r, c} ->
+      valid_coordinates?(r, c, width, height) and Map.has_key?(grid, {r, c})
+    end)
   end
 
   defp schedule_next_generation(speed) do
@@ -220,8 +248,9 @@ defmodule GameOfLife.Game do
 
   # Pattern loading functions
   
+  # Load pattern into sparse grid (only store live cells)
   defp load_pattern_onto_grid(pattern, _grid, width, height) do
-    # Clear the grid first
+    # Start with empty grid
     empty_grid = create_empty_grid(width, height)
     
     # Calculate starting position to center the pattern
@@ -231,7 +260,7 @@ defmodule GameOfLife.Game do
     start_row = div(height - pattern_height, 2)
     start_col = div(width - pattern_width, 2)
     
-    # Place the pattern
+    # Place only the live cells from the pattern
     pattern
     |> Enum.with_index()
     |> Enum.reduce(empty_grid, fn {row_pattern, row_idx}, acc_grid ->
@@ -241,8 +270,8 @@ defmodule GameOfLife.Game do
         actual_row = start_row + row_idx
         actual_col = start_col + col_idx
         
-        if valid_coordinates?(actual_row, actual_col, width, height) do
-          set_cell(inner_grid, actual_row, actual_col, cell)
+        if valid_coordinates?(actual_row, actual_col, width, height) and cell do
+          Map.put(inner_grid, {actual_row, actual_col}, true)
         else
           inner_grid
         end
